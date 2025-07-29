@@ -1,0 +1,208 @@
+{
+  "medications": [
+    {
+      "name": "Paracetamol",
+      "activeIngredient": "Paracetamol",
+      "dosageForm": "Tablet",
+      "strength": "500mg",
+      "thiqa": true,
+      "basic": true,
+      "enhanced": true,
+      "priorAuthorization": false
+    },
+    {
+      "name": "Panadol",
+      "activeIngredient": "Paracetamol",
+      "dosageForm": "Tablet",
+      "strength": "500mg",
+      "thiqa": true,
+      "basic": true,
+      "enhanced": true,
+      "priorAuthorization": false
+    },
+    {
+      "name": "Insulin Glargine",
+      "activeIngredient": "Insulin Glargine",
+      "dosageForm": "Injection",
+      "strength": "100 units/ml",
+      "thiqa": true,
+      "basic": false,
+      "enhanced": true,
+      "priorAuthorization": true,
+      "alternatives": ["Insulin Detemir", "Insulin Degludec"]
+    },
+    {
+      "name": "Lantus",
+      "activeIngredient": "Insulin Glargine",
+      "dosageForm": "Injection",
+      "strength": "100 units/ml",
+      "thiqa": true,
+      "basic": false,
+      "enhanced": true,
+      "priorAuthorization": true,
+      "alternatives": ["Levemir", "Tresiba"]
+    },
+    {
+      "name": "Atorvastatin",
+      "activeIngredient": "Atorvastatin",
+      "dosageForm": "Tablet",
+      "strength": "10mg, 20mg, 40mg, 80mg",
+      "thiqa": true,
+      "basic": true,
+      "enhanced": true,
+      "priorAuthorization": false
+    },
+    {
+      "name": "Lipitor",
+      "activeIngredient": "Atorvastatin",
+      "dosageForm": "Tablet",
+      "strength": "10mg, 20mg, 40mg, 80mg",
+      "thiqa": true,
+      "basic": true,
+      "enhanced": true,
+      "priorAuthorization": false
+    },
+    {
+      "name": "Adalimumab",
+      "activeIngredient": "Adalimumab",
+      "dosageForm": "Injection",
+      "strength": "40mg/0.8ml",
+      "thiqa": true,
+      "basic": false,
+      "enhanced": false,
+      "priorAuthorization": true
+    },
+    {
+      "name": "Humira",
+      "activeIngredient": "Adalimumab",
+      "dosageForm": "Injection",
+      "strength": "40mg/0.8ml",
+      "thiqa": true,
+      "basic": false,
+      "enhanced": false,
+      "priorAuthorization": true
+    },
+    {
+      "name": "Metformin",
+      "activeIngredient": "Metformin Hydrochloride",
+      "dosageForm": "Tablet",
+      "strength": "500mg, 850mg, 1000mg",
+      "thiqa": true,
+      "basic": true,
+      "enhanced": true,
+      "priorAuthorization": false
+    },
+    {
+      "name": "Glucophage",
+      "activeIngredient": "Metformin Hydrochloride",
+      "dosageForm": "Tablet",
+      "strength": "500mg, 850mg, 1000mg",
+      "thiqa": true,
+      "basic": true,
+      "enhanced": true,
+      "priorAuthorization": false
+    },
+    {
+      "name": "Sitagliptin",
+      "activeIngredient": "Sitagliptin",
+      "dosageForm": "Tablet",
+      "strength": "25mg, 50mg, 100mg",
+      "thiqa": true,
+      "basic": false,
+      "enhanced": true,
+      "priorAuthorization": true
+    },
+    {
+      "name": "Januvia",
+      "activeIngredient": "Sitagliptin",
+      "dosageForm": "Tablet",
+      "strength": "25mg, 50mg, 100mg",
+      "thiqa": true,
+      "basic": false,
+      "enhanced": true,
+      "priorAuthorization": true
+    },
+    {
+      "name": "Amlodipine",
+      "activeIngredient": "Amlodipine",
+      "dosageForm": "Tablet",
+      "strength": "5mg, 10mg",
+      "thiqa": true,
+      "basic": true,
+      "enhanced": true,
+      "priorAuthorization": false
+    },
+    {
+      "name": "Norvasc",
+      "activeIngredient": "Amlodipine",
+      "dosageForm": "Tablet",
+      "strength": "5mg, 10mg",
+      "thiqa": true,
+      "basic": true,
+      "enhanced": true,
+      "priorAuthorization": false
+    },
+    {
+      "name": "Omeprazole",
+      "activeIngredient": "Omeprazole",
+      "dosageForm": "Capsule",
+      "strength": "20mg, 40mg",
+      "thiqa": true,
+      "basic": true,
+      "enhanced": true,
+      "priorAuthorization": false
+    },
+    {
+      "name": "Prilosec",
+      "activeIngredient": "Omeprazole",
+      "dosageForm": "Capsule",
+      "strength": "20mg, 40mg",
+      "thiqa": true,
+      "basic": true,
+      "enhanced": true,
+      "priorAuthorization": false
+    },
+    {
+      "name": "Esomeprazole",
+      "activeIngredient": "Esomeprazole",
+      "dosageForm": "Tablet",
+      "strength": "20mg, 40mg",
+      "thiqa": true,
+      "basic": false,
+      "enhanced": true,
+      "priorAuthorization": false,
+      "alternatives": ["Omeprazole", "Pantoprazole"]
+    },
+    {
+      "name": "Nexium",
+      "activeIngredient": "Esomeprazole",
+      "dosageForm": "Tablet",
+      "strength": "20mg, 40mg",
+      "thiqa": true,
+      "basic": false,
+      "enhanced": true,
+      "priorAuthorization": false,
+      "alternatives": ["Prilosec", "Protonix"]
+    },
+    {
+      "name": "Salbutamol",
+      "activeIngredient": "Salbutamol",
+      "dosageForm": "Inhaler",
+      "strength": "100mcg/dose",
+      "thiqa": true,
+      "basic": true,
+      "enhanced": true,
+      "priorAuthorization": false
+    },
+    {
+      "name": "Ventolin",
+      "activeIngredient": "Salbutamol",
+      "dosageForm": "Inhaler",
+      "strength": "100mcg/dose",
+      "thiqa": true,
+      "basic": true,
+      "enhanced": true,
+      "priorAuthorization": false
+    }
+  ]
+}
