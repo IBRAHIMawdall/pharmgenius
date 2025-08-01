@@ -17,7 +17,7 @@ const Header = () => {
         <HStack spacing={2}>
           <Icon as={FaPills} w={6} h={6} />
           <Heading as="h1" size="lg" letterSpacing={'tighter'} fontWeight="bold">
-            PharmGenius
+            UAE PharmGenius
           </Heading>
         </HStack>
         <Spacer />

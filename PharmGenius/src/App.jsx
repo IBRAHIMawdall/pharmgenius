@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Container, HStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, VStack, useColorModeValue } from '@chakra-ui/react';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import AdvancedDrugSearch from './components/AdvancedDrugSearch';
@@ -13,46 +13,54 @@ function App() {
 
   const handleSearch = async (searchParams) => {
     setLoading(true);
+    setSelectedMedication(null);
+    setIcdCodes([]);
+
     try {
-      const response = await axios.get('/daman-formulary.json');
-      const allMedications = response.data.medications;
-      
-      let filtered = allMedications.filter(med => {
-        const matchesTrade = !searchParams.tradeName || 
-          med.name.toLowerCase().includes(searchParams.tradeName.toLowerCase());
-        const matchesGeneric = !searchParams.genericName || 
-          med.genericName.toLowerCase().includes(searchParams.genericName.toLowerCase());
-        const matchesDrugCode = !searchParams.drugCode || 
-          med.drugCode.includes(searchParams.drugCode);
-        const matchesManufacturer = !searchParams.manufacturer || 
-          med.manufacturer.toLowerCase().includes(searchParams.manufacturer.toLowerCase());
-        const matchesDosageForm = !searchParams.dosageForm || 
-          med.dosageForm.toLowerCase().includes(searchParams.dosageForm.toLowerCase());
-        const matchesStrength = !searchParams.strength || 
-          med.strength.toLowerCase().includes(searchParams.strength.toLowerCase());
-        
-        return matchesTrade && matchesGeneric && matchesDrugCode && 
-               matchesManufacturer && matchesDosageForm && matchesStrength;
+      // Step 1: Use the search API to find the drug's ID
+      const searchResponse = await axios.get('/api/drug-service/search', {
+        params: {
+          query: searchParams.query,
+          limit: 1
+        }
       });
       
-      if (filtered.length > 0) {
-        const medication = filtered[0];
-        setSelectedMedication(medication);
+      const { results } = searchResponse.data;
+      
+      if (results && results.length > 0) {
+        const topResult = results[0];
         
-        try {
-          const icdResponse = await axios.get('/icd10-data.json');
-          const drugLower = medication.genericName.toLowerCase();
-          const codes = icdResponse.data[drugLower] || [];
-          setIcdCodes(codes);
-        } catch (error) {
-          setIcdCodes([]);
-        }
+        // Step 2: Fetch the full details for that specific drug using its ID
+        const detailsResponse = await axios.get(`/api/drug-service/drugs/${topResult.id}`);
+        const drugDetails = detailsResponse.data;
+
+        // Map the detailed backend data to the format expected by ApprovalInfoDisplay
+        const medicationDetails = {
+          name: drugDetails.drug_name,
+          activeIngredient: drugDetails.generic_name,
+          dosageForm: drugDetails.dosage_form,
+          strength: drugDetails.strength,
+          manufacturer: drugDetails.manufacturer,
+          price_public: drugDetails.price_public,
+          thiqa: drugDetails.thiqa_coverage,
+          basic: drugDetails.basic_coverage,
+          enhanced: drugDetails.abm1_coverage || drugDetails.abm7_coverage,
+          priorAuthorization: false, // Placeholder: This can be added to the drug details endpoint later
+          drugCode: `ID-${drugDetails.id}`
+        };
+        setSelectedMedication(medicationDetails);
+        
+        // NOTE: The /api/icd10-codes endpoint is part of the microservices vision
+        // but is not implemented in the current monolithic server. This would be a future enhancement.
+        setIcdCodes(drugDetails.icd10_codes || []);
       } else {
         setSelectedMedication(null);
         setIcdCodes([]);
       }
     } catch (error) {
       console.error('Search error:', error);
+      setSelectedMedication(null);
+      setIcdCodes([]);
     } finally {
       setLoading(false);
     }
@@ -66,16 +74,16 @@ function App() {
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg={useColorModeValue('gray.50', 'gray.900')}>
       <Header />
-      <Container maxW="container.xl" flex="1" py={8}>
-        <HStack spacing={8} align="start">
-          <Box flex="1">
+      <Box flex="1" py={8} px={4} w="100%">
+        <VStack spacing={8} align="stretch" w="100%" maxW="none">
+          <Box w="100%">
             <AdvancedDrugSearch onSearch={handleSearch} onReset={handleReset} />
           </Box>
-          <Box flex="1">
+          <Box w="100%">
             <ApprovalInfoDisplay medication={selectedMedication} icdCodes={icdCodes} />
           </Box>
-        </HStack>
-      </Container>
+        </VStack>
+      </Box>
       <Footer />
     </Box>
   );

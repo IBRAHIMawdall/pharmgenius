@@ -44,78 +44,112 @@ const ApprovalInfoDisplay = ({ medication, icdCodes }) => {
       <VStack spacing={6} align="stretch">
         
         {/* Drug Description */}
-        <Box>
-          <Heading size="md" mb={4} color="brand.500">
-            Drug Description
-          </Heading>
-          <VStack spacing={3} align="stretch">
-            <HStack justify="space-between">
-              <Text fontWeight="bold">Trade Name:</Text>
-              <HStack>
-                <Code>{medication.name}</Code>
-                <Button size="xs" onClick={() => copyToClipboard(medication.name, 'Trade name')}>
-                  <FaCopy />
-                </Button>
+        <Box bg="teal.50" p={6} borderRadius="xl" border="2px solid" borderColor="teal.200">
+          <HStack justify="space-between" align="center" mb={6}>
+            <Heading size="lg" color="teal.700">
+              💊 Drug Description
+            </Heading>
+            <Button size="sm" colorScheme="teal" variant="outline" onClick={() => copyToClipboard(`Trade Name: ${medication.name}\nGeneric Name: ${medication.genericName}\nStrength: ${medication.strength}\nForm: ${medication.dosageForm}\nUAE Code: ${medication.drugCode}`, 'Drug description')}>
+              📋 Copy All
+            </Button>
+          </HStack>
+          <VStack spacing={4} align="stretch">
+            <Box bg="white" p={4} borderRadius="lg" shadow="sm">
+              <HStack justify="space-between" align="center">
+                <Text fontWeight="bold" color="gray.700">🏷️ Trade Name:</Text>
+                <HStack>
+                  <Code colorScheme="teal" fontSize="sm" p={2}>{medication.name}</Code>
+                  <Button size="sm" colorScheme="teal" variant="ghost" onClick={() => copyToClipboard(medication.name, 'Trade name')}>
+                    📋
+                  </Button>
+                </HStack>
               </HStack>
-            </HStack>
+            </Box>
             
-            <HStack justify="space-between">
-              <Text fontWeight="bold">Generic Name:</Text>
-              <HStack>
-                <Code>{medication.genericName}</Code>
-                <Button size="xs" onClick={() => copyToClipboard(medication.genericName, 'Generic name')}>
-                  <FaCopy />
-                </Button>
+            <Box bg="white" p={4} borderRadius="lg" shadow="sm">
+              <HStack justify="space-between" align="center">
+                <Text fontWeight="bold" color="gray.700">🧬 Generic Name:</Text>
+                <HStack>
+                  <Code colorScheme="teal" fontSize="sm" p={2}>{medication.genericName}</Code>
+                  <Button size="sm" colorScheme="teal" variant="ghost" onClick={() => copyToClipboard(medication.genericName, 'Generic name')}>
+                    📋
+                  </Button>
+                </HStack>
               </HStack>
+            </Box>
+            
+            <HStack spacing={4}>
+              <Box bg="white" p={4} borderRadius="lg" shadow="sm" flex="1">
+                <HStack justify="space-between">
+                  <Text fontWeight="bold" color="gray.700">⚖️ Strength:</Text>
+                  <HStack>
+                    <Badge colorScheme="purple" fontSize="sm" p={2}>{medication.strength}</Badge>
+                    <Button size="sm" colorScheme="purple" variant="ghost" onClick={() => copyToClipboard(medication.strength, 'Strength')}>
+                      📋
+                    </Button>
+                  </HStack>
+                </HStack>
+              </Box>
+              
+              <Box bg="white" p={4} borderRadius="lg" shadow="sm" flex="1">
+                <HStack justify="space-between">
+                  <Text fontWeight="bold" color="gray.700">📋 Form:</Text>
+                  <HStack>
+                    <Badge colorScheme="orange" fontSize="sm" p={2}>{medication.dosageForm}</Badge>
+                    <Button size="sm" colorScheme="orange" variant="ghost" onClick={() => copyToClipboard(medication.dosageForm, 'Dosage form')}>
+                      📋
+                    </Button>
+                  </HStack>
+                </HStack>
+              </Box>
             </HStack>
             
-            <HStack justify="space-between">
-              <Text fontWeight="bold">Strength:</Text>
-              <Text>{medication.strength}</Text>
-            </HStack>
-            
-            <HStack justify="space-between">
-              <Text fontWeight="bold">Dosage Form:</Text>
-              <Text>{medication.dosageForm}</Text>
-            </HStack>
-            
-            <HStack justify="space-between">
-              <Text fontWeight="bold">Drug Code:</Text>
-              <HStack>
-                <Code>{medication.drugCode}</Code>
-                <Button size="xs" onClick={() => copyToClipboard(medication.drugCode, 'Drug code')}>
-                  <FaCopy />
-                </Button>
+            <Box bg="white" p={4} borderRadius="lg" shadow="sm">
+              <HStack justify="space-between" align="center">
+                <Text fontWeight="bold" color="gray.700">🇦🇪 UAE Drug Code:</Text>
+                <HStack>
+                  <Code colorScheme="red" fontSize="sm" p={2}>{medication.drugCode}</Code>
+                  <Button size="sm" colorScheme="red" variant="ghost" onClick={() => copyToClipboard(medication.drugCode, 'Drug code')}>
+                    📋
+                  </Button>
+                </HStack>
               </HStack>
-            </HStack>
+            </Box>
           </VStack>
         </Box>
 
         <Divider />
 
         {/* ICD-10 Codes */}
-        <Box>
-          <Heading size="md" mb={4} color="brand.500">
-            ICD-10 Codes for Insurance Approval
-          </Heading>
+        <Box bg="teal.50" p={6} borderRadius="xl" border="2px solid" borderColor="teal.200">
+          <HStack justify="space-between" align="center" mb={6}>
+            <Heading size="lg" color="teal.700">
+              🏥 ICD-10 Codes
+            </Heading>
+            {icdCodes && icdCodes.length > 0 && (
+              <Button size="sm" colorScheme="teal" variant="outline" onClick={() => copyToClipboard(icdCodes.map(code => `${code.code} - ${code.description}`).join('\n'), 'ICD-10 codes')}>
+                📋 Copy All
+              </Button>
+            )}
+          </HStack>
           {icdCodes && icdCodes.length > 0 ? (
             <VStack spacing={3} align="stretch">
               {icdCodes.map((code, index) => (
-                <HStack key={index} justify="space-between" p={3} borderWidth="1px" borderRadius="md">
-                  <VStack align="start" spacing={1}>
-                    <HStack>
-                      <Badge colorScheme="brand" fontSize="md">{code.code}</Badge>
-                      <Button size="xs" onClick={() => copyToClipboard(code.code, 'ICD-10 code')}>
-                        <FaCopy />
-                      </Button>
-                    </HStack>
-                    <Text fontSize="sm">{code.description}</Text>
-                  </VStack>
-                </HStack>
+                <Box key={index} bg="white" p={4} borderRadius="lg" shadow="sm">
+                  <HStack justify="space-between" align="center">
+                    <VStack align="start" spacing={1} flex="1">
+                      <Badge colorScheme="teal" fontSize="sm" p={2}>{code.code}</Badge>
+                      <Text fontSize="xs" color="gray.600">{code.description}</Text>
+                    </VStack>
+                    <Button size="sm" colorScheme="teal" variant="ghost" onClick={() => copyToClipboard(`${code.code} - ${code.description}`, 'ICD-10 code')}>
+                      📋
+                    </Button>
+                  </HStack>
+                </Box>
               ))}
             </VStack>
           ) : (
-            <Alert status="info">
+            <Alert status="info" borderRadius="lg">
               <AlertIcon />
               No ICD-10 codes available for this medication
             </Alert>
@@ -124,67 +158,117 @@ const ApprovalInfoDisplay = ({ medication, icdCodes }) => {
 
         <Divider />
 
-        {/* Basic Info */}
-        <Box>
-          <Heading size="md" mb={4} color="brand.500">
-            Basic Information
-          </Heading>
-          <VStack spacing={3} align="stretch">
-            <HStack justify="space-between">
-              <Text fontWeight="bold">Manufacturer:</Text>
-              <Text>{medication.manufacturer}</Text>
-            </HStack>
-            
-            <HStack justify="space-between">
-              <Text fontWeight="bold">Package Size:</Text>
-              <Text>{medication.packageSize}</Text>
-            </HStack>
-            
-            <HStack justify="space-between">
-              <Text fontWeight="bold">Dispense Mode:</Text>
-              <Badge colorScheme={medication.dispenseMode?.includes('Controlled') ? 'red' : 'green'}>
-                {medication.dispenseMode}
-              </Badge>
-            </HStack>
-            
-            <HStack justify="space-between">
-              <Text fontWeight="bold">Package Price:</Text>
-              <Text fontWeight="bold" color="brand.500">AED {medication.packagePricePublic}</Text>
-            </HStack>
-            
-            <HStack justify="space-between">
-              <Text fontWeight="bold">Unit Price:</Text>
-              <Text>AED {medication.unitPricePublic}</Text>
-            </HStack>
-          </VStack>
-        </Box>
+
 
         <Divider />
 
         {/* Insurance Coverage */}
-        <Box>
-          <Heading size="md" mb={4} color="brand.500">
-            Insurance Coverage Status
-          </Heading>
-          <VStack spacing={3} align="stretch">
-            <HStack justify="space-between">
-              <Text fontWeight="bold">Thiqa Plan:</Text>
-              <Badge colorScheme={medication.thiqa ? 'green' : 'red'}>
-                {medication.thiqa ? 'Covered' : 'Not Covered'}
-              </Badge>
-            </HStack>
+        <Box bg="purple.50" p={6} borderRadius="xl" border="2px solid" borderColor="purple.200">
+          <HStack justify="space-between" align="center" mb={6}>
+            <Heading size="lg" color="purple.600">
+              🏥 Insurance Coverage Status
+            </Heading>
+            <Button 
+              size="sm" 
+              colorScheme="purple" 
+              variant="outline" 
+              onClick={() => copyToClipboard(
+                `Thiqa Plan: ${medication.thiqa ? 'Covered' : 'Not Covered'}\nBasic Plan: ${medication.basic ? 'Covered' : 'Not Covered'}\nEnhanced Plan: ${medication.enhanced ? 'Covered' : 'Not Covered'}`, 
+                'Insurance coverage'
+              )}
+            >
+              📋 Copy All
+            </Button>
+          </HStack>
+          <VStack spacing={4} align="stretch">
+            <Box bg="white" p={5} borderRadius="lg" shadow="md" border="2px solid" borderColor={medication.thiqa ? 'green.200' : 'red.200'}>
+              <HStack justify="space-between" align="center">
+                <HStack>
+                  <Text fontSize="2xl">🇦🇪</Text>
+                  <Text fontWeight="bold" fontSize="lg" color="gray.700">Thiqa Plan:</Text>
+                </HStack>
+                <HStack>
+                  <Badge 
+                    colorScheme={medication.thiqa ? 'green' : 'red'} 
+                    fontSize="lg" 
+                    p={3} 
+                    borderRadius="full"
+                  >
+                    {medication.thiqa ? '✅ Covered' : '❌ Not Covered'}
+                  </Badge>
+                  <Button 
+                    size="sm" 
+                    colorScheme={medication.thiqa ? 'green' : 'red'} 
+                    variant="ghost" 
+                    onClick={() => copyToClipboard(`Thiqa Plan: ${medication.thiqa ? 'Covered' : 'Not Covered'}`, 'Thiqa coverage')}
+                  >
+                    📋
+                  </Button>
+                </HStack>
+              </HStack>
+            </Box>
             
-            <HStack justify="space-between">
-              <Text fontWeight="bold">Basic Plan:</Text>
-              <Badge colorScheme={medication.basic ? 'green' : 'red'}>
-                {medication.basic ? 'Covered' : 'Not Covered'}
-              </Badge>
-            </HStack>
+            <Box bg="white" p={5} borderRadius="lg" shadow="md" border="2px solid" borderColor={medication.basic ? 'green.200' : 'red.200'}>
+              <HStack justify="space-between" align="center">
+                <HStack>
+                  <Text fontSize="2xl">🏥</Text>
+                  <Text fontWeight="bold" fontSize="lg" color="gray.700">Basic Plan:</Text>
+                </HStack>
+                <HStack>
+                  <Badge 
+                    colorScheme={medication.basic ? 'green' : 'red'} 
+                    fontSize="lg" 
+                    p={3} 
+                    borderRadius="full"
+                  >
+                    {medication.basic ? '✅ Covered' : '❌ Not Covered'}
+                  </Badge>
+                  <Button 
+                    size="sm" 
+                    colorScheme={medication.basic ? 'green' : 'red'} 
+                    variant="ghost" 
+                    onClick={() => copyToClipboard(`Basic Plan: ${medication.basic ? 'Covered' : 'Not Covered'}`, 'Basic coverage')}
+                  >
+                    📋
+                  </Button>
+                </HStack>
+              </HStack>
+            </Box>
+            
+            <Box bg="white" p={5} borderRadius="lg" shadow="md" border="2px solid" borderColor={medication.enhanced ? 'green.200' : 'red.200'}>
+              <HStack justify="space-between" align="center">
+                <HStack>
+                  <Text fontSize="2xl">💎</Text>
+                  <Text fontWeight="bold" fontSize="lg" color="gray.700">Enhanced Plan:</Text>
+                </HStack>
+                <HStack>
+                  <Badge 
+                    colorScheme={medication.enhanced ? 'green' : 'red'} 
+                    fontSize="lg" 
+                    p={3} 
+                    borderRadius="full"
+                  >
+                    {medication.enhanced ? '✅ Covered' : '❌ Not Covered'}
+                  </Badge>
+                  <Button 
+                    size="sm" 
+                    colorScheme={medication.enhanced ? 'green' : 'red'} 
+                    variant="ghost" 
+                    onClick={() => copyToClipboard(`Enhanced Plan: ${medication.enhanced ? 'Covered' : 'Not Covered'}`, 'Enhanced coverage')}
+                  >
+                    📋
+                  </Button>
+                </HStack>
+              </HStack>
+            </Box>
             
             {medication.priorAuthorization && (
-              <Alert status="warning">
-                <AlertIcon />
-                Prior Authorization Required
+              <Alert status="warning" borderRadius="lg" p={4}>
+                <AlertIcon boxSize={6} />
+                <VStack align="start" spacing={1}>
+                  <Text fontWeight="bold">Prior Authorization Required</Text>
+                  <Text fontSize="sm">Contact insurance provider before dispensing</Text>
+                </VStack>
               </Alert>
             )}
           </VStack>

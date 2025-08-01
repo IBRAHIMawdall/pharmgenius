@@ -1,0 +1,49 @@
+{
+  "medications": [
+    {
+      "name": "XIFAXAN",
+      "genericName": "Rifaximin",
+      "strength": "550 mg",
+      "dosageForm": "Tablets",
+      "drugCode": "R01-0001-12345-01",
+      "manufacturer": "Salix Pharmaceuticals",
+      "packageSize": "60 Tablets",
+      "dispenseMode": "Prescription Only Medicine",
+      "packagePricePublic": 450.0,
+      "unitPricePublic": 7.5,
+      "thiqa": true,
+      "basic": false,
+      "priorAuthorization": true
+    },
+    {
+      "name": "PANADOL",
+      "genericName": "Paracetamol",
+      "strength": "500 mg",
+      "dosageForm": "Tablets",
+      "drugCode": "P01-0001-00001-01",
+      "manufacturer": "GSK",
+      "packageSize": "20 Tablets",
+      "dispenseMode": "Over The Counter",
+      "packagePricePublic": 8.5,
+      "unitPricePublic": 0.43,
+      "thiqa": true,
+      "basic": true,
+      "priorAuthorization": false
+    },
+    {
+      "name": "AUGMENTIN",
+      "genericName": "Amoxicillin/Clavulanic Acid",
+      "strength": "625 mg",
+      "dosageForm": "Tablets",
+      "drugCode": "A01-0001-00015-01",
+      "manufacturer": "GSK",
+      "packageSize": "14 Tablets",
+      "dispenseMode": "Prescription Only Medicine",
+      "packagePricePublic": 45.25,
+      "unitPricePublic": 3.23,
+      "thiqa": true,
+      "basic": true,
+      "priorAuthorization": false
+    }
+  ]
+}

@@ -124,8 +124,8 @@ const ICD10DrugSearch = () => {
                   onClick={() => selectICD10(result)}
                 >
                   <HStack justify="space-between">
-                    <Text>{result.indication}</Text>
-                    <Badge>{result.icd10_code}</Badge>
+                    <Text fontSize="sm">{result.indication}</Text>
+                    <Badge fontSize="xs">{result.icd10_code}</Badge>
                   </HStack>
                 </Box>
               ))}
@@ -164,8 +164,8 @@ const ICD10DrugSearch = () => {
                 >
                   <HStack justify="space-between" align="start">
                     <VStack align="start" spacing={1}>
-                      <Text fontWeight="bold">{drug['Package Name']}</Text>
-                      <Text fontSize="sm" color="gray.600">
+                      <Text fontWeight="bold" fontSize="sm">{drug['Package Name']}</Text>
+                      <Text fontSize="xs" color="gray.600">
                         {drug['Generic Name']} - {drug['Strength']}
                       </Text>
                       <HStack>

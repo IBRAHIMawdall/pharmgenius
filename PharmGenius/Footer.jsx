@@ -4,7 +4,7 @@ import {
   Stack,
   Text,
   Link,
-  HStack,
+    HStack,
   IconButton,
   useColorModeValue,
 } from '@chakra-ui/react'
@@ -28,43 +28,43 @@ export default function Footer() {
         align={{ base: 'center', md: 'center' }}
       >
         <Text>© 2025 PharmGenius. All rights reserved</Text>
-        
+
         <HStack spacing={4}>
           <IconButton
             as={Link}
             href="http://linkedin.com/in/ibrahim-salama-6b0b5812a"
             target="_blank"
             rel="noopener"
-            aria-label="LinkedIn"
+              aria-label="LinkedIn"
             icon={<FaLinkedinIn />}
             size="sm"
             colorScheme="linkedin"
             variant="ghost"
             _hover={{ bg: 'linkedin.500', color: 'white' }}
           />
-          
+
           <IconButton
             as={Link}
             href="tel:+971585004660"
-            aria-label="Phone"
+              aria-label="Phone"
             icon={<FaPhone />}
             size="sm"
             colorScheme="green"
             variant="ghost"
             _hover={{ bg: 'green.500', color: 'white' }}
           />
-          
+
           <IconButton
             as={Link}
             href="mailto:ibrahiemawdallah@gmail.com"
-            aria-label="Email"
+              aria-label="Email"
             icon={<FaEnvelope />}
             size="sm"
             colorScheme="blue"
             variant="ghost"
             _hover={{ bg: 'blue.500', color: 'white' }}
           />
-          
+
           <IconButton
             as={Link}
             href="#"
@@ -75,7 +75,7 @@ export default function Footer() {
             variant="ghost"
             _hover={{ bg: 'gray.500', color: 'white' }}
           />
-          
+
           <IconButton
             as={Link}
             href="https://github.com/IBRAHIMawdall"
@@ -89,7 +89,7 @@ export default function Footer() {
             _hover={{ bg: 'gray.800', color: 'white' }}
           />
         </HStack>
-      </Container>
+        </Container>
     </Box>
   )
 }

@@ -27,10 +27,8 @@ const ICD10Results = ({ drugName }) => {
     const fetchIcdCodes = async () => {
       setLoading(true);
       try {
-        const response = await axios.get('/icd10-data.json');
-        const drugLower = drugName.toLowerCase();
-        const codes = response.data[drugLower] || [];
-        setIcdCodes(codes);
+        const response = await axios.get(`/api/icd10?terms=${encodeURIComponent(drugName)}`);
+        setIcdCodes(response.data.results || []);
       } catch (error) {
         console.error('Error fetching ICD-10 codes:', error);
         setIcdCodes([]);
@@ -98,7 +96,7 @@ const ICD10Results = ({ drugName }) => {
               <Badge colorScheme="brand" mb={1}>
                 {item.code}
               </Badge>
-              <Text>{item.description}</Text>
+              <Text fontSize="sm">{item.description}</Text>
             </Box>
             <Button
               size="sm"

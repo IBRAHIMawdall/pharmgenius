@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Process Flow Editor</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        .section h3 { color: #333; margin-bottom: 10px; }
+        .section ul { list-style: none; padding: 0; }
+        .section li { margin: 5px 0; padding: 5px; background: #f9f9f9; border-radius: 3px; }
+        .editable { border: 1px solid transparent; padding: 2px; }
+        .editable:focus { border-color: #007bff; outline: none; }
+        .add-btn { background: #28a745; color: white; border: none; padding: 5px 10px; margin: 5px; cursor: pointer; }
+        .remove-btn { background: #dc3545; color: white; border: none; padding: 2px 6px; margin-left: 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>PharmGenius Process Flow Editor</h1>
+    
+    <div class="section">
+        <h3 contenteditable="true" class="editable">Reset Process</h3>
+        <ul>
+            <li><span contenteditable="true" class="editable">Clear all search parameters</span><button class="remove-btn" onclick="this.parentElement.remove()">×</button></li>
+            <li><span contenteditable="true" class="editable">Reset form fields</span><button class="remove-btn" onclick="this.parentElement.remove()">×</button></li>
+            <li><span contenteditable="true" class="editable">Clear results</span><button class="remove-btn" onclick="this.parentElement.remove()">×</button></li>
+        </ul>
+        <button class="add-btn" onclick="addItem(this)">Add Item</button>
+    </div>
+
+    <div class="section">
+        <h3 contenteditable="true" class="editable">Search Parameters</h3>
+        <ul>
+            <li><span contenteditable="true" class="editable">Diagnosis (e.g., 'Kdlo')</span><button class="remove-btn" onclick="this.parentElement.remove()">×</button></li>
+            <li><span contenteditable="true" class="editable">Trade Name</span><button class="remove-btn" onclick="this.parentElement.remove()">×</button></li>
+            <li><span contenteditable="true" class="editable">Generic Name</span><button class="remove-btn" onclick="this.parentElement.remove()">×</button></li>
+        </ul>
+        <button class="add-btn" onclick="addItem(this)">Add Item</button>
+    </div>
+
+    <div class="section">
+        <h3 contenteditable="true" class="editable">Resources</h3>
+        <ul>
+            <li><span contenteditable="true" class="editable">Vale Druglist</span><button class="remove-btn" onclick="this.parentElement.remove()">×</button></li>
+            <li><span contenteditable="true" class="editable">Free API servers for ICD-10</span><button class="remove-btn" onclick="this.parentElement.remove()">×</button></li>
+            <li><span contenteditable="true" class="editable">Available data sources</span><button class="remove-btn" onclick="this.parentElement.remove()">×</button></li>
+        </ul>
+        <button class="add-btn" onclick="addItem(this)">Add Item</button>
+    </div>
+
+    <div class="section">
+        <h3 contenteditable="true" class="editable">Required Info for Approval</h3>
+        <ul>
+            <li><span contenteditable="true" class="editable">Drug Description</span><button class="remove-btn" onclick="this.parentElement.remove()">×</button></li>
+            <li><span contenteditable="true" class="editable">ICD-10 Code</span><button class="remove-btn" onclick="this.parentElement.remove()">×</button></li>
+            <li><span contenteditable="true" class="editable">Basic Info</span><button class="remove-btn" onclick="this.parentElement.remove()">×</button></li>
+            <li><span contenteditable="true" class="editable">Contraindications</span><button class="remove-btn" onclick="this.parentElement.remove()">×</button></li>
+        </ul>
+        <button class="add-btn" onclick="addItem(this)">Add Item</button>
+    </div>
+
+    <script>
+        function addItem(button) {
+            const section = button.parentElement;
+            const ul = section.querySelector('ul');
+            const li = document.createElement('li');
+            li.innerHTML = '<span contenteditable="true" class="editable">New Item</span><button class="remove-btn" onclick="this.parentElement.remove()">×</button>';
+            ul.appendChild(li);
+        }
+    </script>
+</body>
+</html> 

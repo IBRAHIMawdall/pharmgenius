@@ -2,227 +2,137 @@ import { useState } from 'react';
 import {
   Box,
   VStack,
-  HStack,
   Input,
   Button,
   FormControl,
-  FormLabel,
-  Select,
-  Textarea,
   useColorModeValue,
   Heading,
+  List,
+  ListItem,
   Text,
-  Divider,
-  Badge,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
 } from '@chakra-ui/react';
-import { FaSearch, FaRedo } from 'react-icons/fa';
+import { FaSearch } from 'react-icons/fa';
 
 const AdvancedDrugSearch = ({ onSearch, onReset }) => {
-  const [searchParams, setSearchParams] = useState({
-    diagnosis: '',
-    tradeName: '',
-    genericName: '',
-    drugCode: '',
-    manufacturer: '',
-    dosageForm: '',
-    strength: ''
-  });
+  const [searchQuery, setSearchQuery] = useState('');
+  const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
 
   const bgColor = useColorModeValue('white', 'gray.700');
   const borderColor = useColorModeValue('gray.200', 'gray.600');
 
-  const handleInputChange = (field, value) => {
-    setSearchParams(prev => ({
-      ...prev,
-      [field]: value
-    }));
+  const mockSuggestions = [
+    '💊 Xifaxan',
+    '💊 Rifaximin',
+    '💊 Paracetamol',
+    '💊 Panadol',
+    '💊 Glucophage',
+    '💊 Augmentin',
+    '💊 Lipitor',
+    '🩺 Diabetes',
+    '🩺 Hypertension',
+    '🏭 GSK',
+    '🏭 Pfizer'
+  ];
+
+  const handleInputChange = (value) => {
+    setSearchQuery(value);
+    if (value.length > 1) {
+      const filtered = mockSuggestions.filter(item => 
+        item.toLowerCase().includes(value.toLowerCase())
+      );
+      setSuggestions(filtered.slice(0, 5));
+      setShowSuggestions(true);
+    } else {
+      setShowSuggestions(false);
+    }
   };
 
   const handleSearch = () => {
-    onSearch(searchParams);
+    onSearch({ query: searchQuery });
+    setShowSuggestions(false);
   };
 
-  const handleReset = () => {
-    setSearchParams({
-      diagnosis: '',
-      tradeName: '',
-      genericName: '',
-      drugCode: '',
-      manufacturer: '',
-      dosageForm: '',
-      strength: ''
-    });
-    onReset();
+  const handleSuggestionClick = (suggestion) => {
+    setSearchQuery(suggestion);
+    setShowSuggestions(false);
+    onSearch({ query: suggestion });
   };
 
   return (
     <Box bg={bgColor} borderRadius="lg" p={6} shadow="md" borderWidth="1px" borderColor={borderColor}>
       <VStack spacing={6} align="stretch">
-        
-        {/* Reset Process */}
-        <Box>
-          <Button
-            leftIcon={<FaRedo />}
-            onClick={handleReset}
-            colorScheme="gray"
-            variant="outline"
-            size="sm"
-            mb={4}
-          >
-            Reset Process
-          </Button>
-        </Box>
-
-        {/* Search Parameters */}
-        <Box>
-          <Heading size="md" mb={4} color="brand.500">
-            Search Parameters
+        <Box bg="teal.50" p={6} borderRadius="xl" border="2px solid" borderColor="teal.200">
+          <Heading size="lg" mb={6} color="teal.700" textAlign="center">
+            🔍 Search UAE Drug Registry
           </Heading>
-          <VStack spacing={4} align="stretch">
+          
+          <Box position="relative">
             <FormControl>
-              <FormLabel>Diagnosis (e.g., 'Kdlo')</FormLabel>
               <Input
-                placeholder="Enter diagnosis or condition"
-                value={searchParams.diagnosis}
-                onChange={(e) => handleInputChange('diagnosis', e.target.value)}
+                size="lg"
+                placeholder="Enter drug name, diagnosis, code, or manufacturer"
+                value={searchQuery}
+                onChange={(e) => handleInputChange(e.target.value)}
+                bg="white"
+                border="2px solid"
+                borderColor="gray.200"
+                _focus={{ borderColor: "teal.400", bg: "white" }}
+                fontSize="lg"
+                p={6}
               />
             </FormControl>
             
-            <HStack spacing={4}>
-              <FormControl>
-                <FormLabel>Trade Name</FormLabel>
-                <Input
-                  placeholder="Brand name"
-                  value={searchParams.tradeName}
-                  onChange={(e) => handleInputChange('tradeName', e.target.value)}
-                />
-              </FormControl>
-              
-              <FormControl>
-                <FormLabel>Generic Name</FormLabel>
-                <Input
-                  placeholder="Generic name"
-                  value={searchParams.genericName}
-                  onChange={(e) => handleInputChange('genericName', e.target.value)}
-                />
-              </FormControl>
-            </HStack>
-
-            <HStack spacing={4}>
-              <FormControl>
-                <FormLabel>Drug Code</FormLabel>
-                <Input
-                  placeholder="UAE drug code"
-                  value={searchParams.drugCode}
-                  onChange={(e) => handleInputChange('drugCode', e.target.value)}
-                />
-              </FormControl>
-              
-              <FormControl>
-                <FormLabel>Manufacturer</FormLabel>
-                <Input
-                  placeholder="Manufacturer name"
-                  value={searchParams.manufacturer}
-                  onChange={(e) => handleInputChange('manufacturer', e.target.value)}
-                />
-              </FormControl>
-            </HStack>
-
-            <HStack spacing={4}>
-              <FormControl>
-                <FormLabel>Dosage Form</FormLabel>
-                <Select
-                  placeholder="Select dosage form"
-                  value={searchParams.dosageForm}
-                  onChange={(e) => handleInputChange('dosageForm', e.target.value)}
-                >
-                  <option value="Tablets">Tablets</option>
-                  <option value="Capsules">Capsules</option>
-                  <option value="Syrup">Syrup</option>
-                  <option value="Injection">Injection</option>
-                  <option value="Cream">Cream</option>
-                  <option value="Ointment">Ointment</option>
-                  <option value="Drops">Drops</option>
-                  <option value="Inhaler">Inhaler</option>
-                </Select>
-              </FormControl>
-              
-              <FormControl>
-                <FormLabel>Strength</FormLabel>
-                <Input
-                  placeholder="e.g., 500mg"
-                  value={searchParams.strength}
-                  onChange={(e) => handleInputChange('strength', e.target.value)}
-                />
-              </FormControl>
-            </HStack>
-          </VStack>
+            {showSuggestions && suggestions.length > 0 && (
+              <Box
+                position="absolute"
+                top="100%"
+                left={0}
+                right={0}
+                bg="white"
+                border="2px solid"
+                borderColor="teal.200"
+                borderRadius="lg"
+                shadow="lg"
+                zIndex={10}
+                mt={2}
+              >
+                <List spacing={0}>
+                  {suggestions.map((suggestion, index) => (
+                    <ListItem
+                      key={index}
+                      p={3}
+                      cursor="pointer"
+                      _hover={{ bg: "teal.50" }}
+                      onClick={() => handleSuggestionClick(suggestion)}
+                      borderBottom={index < suggestions.length - 1 ? "1px solid" : "none"}
+                      borderColor="gray.100"
+                    >
+                      <Text fontWeight="semibold" fontSize="sm">{suggestion}</Text>
+                    </ListItem>
+                  ))}
+                </List>
+              </Box>
+            )}
+          </Box>
         </Box>
 
-        <Divider />
-
-        {/* Resources */}
-        <Box>
-          <Heading size="md" mb={4} color="brand.500">
-            Resources
-          </Heading>
-          <VStack spacing={2} align="stretch">
-            <HStack>
-              <Badge colorScheme="green">✓</Badge>
-              <Text>Vale Druglist - UAE Official Registry</Text>
-            </HStack>
-            <HStack>
-              <Badge colorScheme="green">✓</Badge>
-              <Text>Free API servers for ICD-10</Text>
-            </HStack>
-            <HStack>
-              <Badge colorScheme="green">✓</Badge>
-              <Text>Available data sources - 21,322 medications</Text>
-            </HStack>
-          </VStack>
-        </Box>
-
-        <Divider />
-
-        {/* Required Info for Approval */}
-        <Box>
-          <Heading size="md" mb={4} color="brand.500">
-            Required Info for Approval
-          </Heading>
-          <VStack spacing={2} align="stretch">
-            <HStack>
-              <Badge colorScheme="blue">📋</Badge>
-              <Text>Drug Description</Text>
-            </HStack>
-            <HStack>
-              <Badge colorScheme="blue">🏥</Badge>
-              <Text>ICD-10 Code</Text>
-            </HStack>
-            <HStack>
-              <Badge colorScheme="blue">ℹ️</Badge>
-              <Text>Basic Info</Text>
-            </HStack>
-            <HStack>
-              <Badge colorScheme="red">⚠️</Badge>
-              <Text>Contraindications</Text>
-            </HStack>
-          </VStack>
-        </Box>
-
-        {/* Search Button */}
         <Button
           leftIcon={<FaSearch />}
           onClick={handleSearch}
-          colorScheme="brand"
+          colorScheme="teal"
           size="lg"
-          isDisabled={!searchParams.tradeName && !searchParams.genericName && !searchParams.diagnosis}
+          width="100%"
+          height="60px"
+          fontSize="lg"
+          fontWeight="semibold"
+          borderRadius="lg"
+          shadow="md"
+          _hover={{ transform: "translateY(-1px)", shadow: "lg", bg: "teal.600" }}
+          isDisabled={!searchQuery.trim()}
+          bg="teal.500"
         >
-          Search Medications
+          🔍 Search UAE Drug Registry
         </Button>
       </VStack>
     </Box>

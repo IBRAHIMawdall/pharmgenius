@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: pharmgenius
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: COSMOS_DB_ENDPOINT
+        sync: false
+      - key: COSMOS_DB_KEY
+        sync: false
+      - key: COSMOS_DB_DATABASE
+        value: pharmgenius
+      - key: COSMOS_DB_CONTAINER
+        value: drugs

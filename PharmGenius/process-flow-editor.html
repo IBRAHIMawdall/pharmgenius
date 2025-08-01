@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PharmGenius Process Flow Editor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .process-flow {
+            padding: 30px;
+        }
+
+        .flow-item {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .flow-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .flow-item h3 {
+            color: #667eea;
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .flow-item ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .flow-item li {
+            padding: 8px 0;
+            border-bottom: 1px solid #e9ecef;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .flow-item li:before {
+            content: "•";
+            color: #667eea;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        .flow-item li:last-child {
+            border-bottom: none;
+        }
+
+        .editable {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin: 5px 0;
+            font-size: 0.95rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .editable:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .add-item-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            transition: background 0.3s ease;
+        }
+
+        .add-item-btn:hover {
+            background: #5a6fd8;
+        }
+
+        .remove-item-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-left: 10px;
+            transition: background 0.3s ease;
+        }
+
+        .remove-item-btn:hover {
+            background: #c82333;
+        }
+
+        .save-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            margin-top: 20px;
+            transition: background 0.3s ease;
+        }
+
+        .save-btn:hover {
+            background: #218838;
+        }
+
+        .controls {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>PharmGenius Process Flow</h1>
+            <p>Edit and customize your pharmaceutical workflow</p>
+        </div>
+
+        <div class="process-flow">
+            <!-- Reset Process -->
+            <div class="flow-item" data-section="reset">
+                <h3 contenteditable="true">Reset Process</h3>
+                <ul>
+                    <li>
+                        <span class="editable" contenteditable="true">Clear all search parameters</span>
+                        <button class="remove-item-btn" onclick="removeItem(this)">×</button>
+                    </li>
+                    <li>
+                        <span class="editable" contenteditable="true">Reset form fields</span>
+                        <button class="remove-item-btn" onclick="removeItem(this)">×</button>
+                    </li>
+                    <li>
+                        <span class="editable" contenteditable="true">Clear results</span>
+                        <button class="remove-item-btn" onclick="removeItem(this)">×</button>
+                    </li>
+                </ul>
+                <button class="add-item-btn" onclick="addItem(this)">Add Item</button>
+            </div>
+
+            <!-- Search Parameters -->
+            <div class="flow-item" data-section="search">
+                <h3 contenteditable="true">Search Parameters</h3>
+                <ul>
+                    <li>
+                        <span class="editable" contenteditable="true">Diagnosis (e.g., 'Kdlo')</span>
+                        <button class="remove-item-btn" onclick="removeItem(this)">×</button>
+                    </li>
+                    <li>
+                        <span class="editable" contenteditable="true">Trade Name</span>
+                        <button class="remove-item-btn" onclick="removeItem(this)">×</button>
+                    </li>
+                    <li>
+                        <span class="editable" contenteditable="true">Generic Name</span>
+                        <button class="remove-item-btn" onclick="removeItem(this)">×</button>
+                    </li>
+                </ul>
+                <button class="add-item-btn" onclick="addItem(this)">Add Item</button>
+            </div>
+
+            <!-- Resources -->
+            <div class="flow-item" data-section="resources">
+                <h3 contenteditable="true">Resources</h3>
+                <ul>
+                    <li>
+                        <span class="editable" contenteditable="true">Vale Druglist</span>
+                        <button class="remove-item-btn" onclick="removeItem(this)">×</button>
+                    </li>
+                    <li>
+                        <span class="editable" contenteditable="true">Free API servers for ICD-10</span>
+                        <button class="remove-item-btn" onclick="removeItem(this)">×</button>
+                    </li>
+                    <li>
+                        <span class="editable" contenteditable="true">Available data sources</span>
+                        <button class="remove-item-btn" onclick="removeItem(this)">×</button>
+                    </li>
+                </ul>
+                <button class="add-item-btn" onclick="addItem(this)">Add Item</button>
+            </div>
+
+            <!-- Required Info for Approval -->
+            <div class="flow-item" data-section="approval">
+                <h3 contenteditable="true">Required Info for Approval</h3>
+                <ul>
+                    <li>
+                        <span class="editable" contenteditable="true">Drug Description</span>
+                        <button class="remove-item-btn" onclick="removeItem(this)">×</button>
+                    </li>
+                    <li>
+                        <span class="editable" contenteditable="true">ICD-10 Code</span>
+                        <button class="remove-item-btn" onclick="removeItem(this)">×</button>
+                    </li>
+                    <li>
+                        <span class="editable" contenteditable="true">Basic Info</span>
+                        <button class="remove-item-btn" onclick="removeItem(this)">×</button>
+                    </li>
+                    <li>
+                        <span class="editable" contenteditable="true">Contraindications</span>
+                        <button class="remove-item-btn" onclick="removeItem(this)">×</button>
+                    </li>
+                </ul>
+                <button class="add-item-btn" onclick="addItem(this)">Add Item</button>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="save-btn" onclick="saveContent()">Save Changes</button>
+        </div>
+    </div>
+
+    <script>
+        function addItem(button) {
+            const flowItem = button.parentElement;
+            const ul = flowItem.querySelector('ul');
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <span class="editable" contenteditable="true">New Item</span>
+                <button class="remove-item-btn" onclick="removeItem(this)">×</button>
+            `;
+            ul.appendChild(li);
+        }
+
+        function removeItem(button) {
+            const li = button.parentElement;
+            li.remove();
+        }
+
+        function saveContent() {
+            const content = {};
+            const flowItems = document.querySelectorAll('.flow-item');
+            
+            flowItems.forEach(item => {
+                const section = item.dataset.section;
+                const title = item.querySelector('h3').textContent;
+                const items = Array.from(item.querySelectorAll('.editable')).map(span => span.textContent);
+                
+                content[section] = {
+                    title: title,
+                    items: items
+                };
+            });
+
+            // Save to localStorage
+            localStorage.setItem('pharmGeniusProcessFlow', JSON.stringify(content));
+            
+            // Create downloadable file
+            const dataStr = JSON.stringify(content, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'pharmgenius-process-flow.json';
+            link.click();
+            
+            alert('Process flow saved successfully!');
+        }
+
+        // Load saved content on page load
+        window.addEventListener('load', function() {
+            const saved = localStorage.getItem('pharmGeniusProcessFlow');
+            if (saved) {
+                const content = JSON.parse(saved);
+                // You can implement loading logic here if needed
+            }
+        });
+    </script>
+</body>
+</html> 

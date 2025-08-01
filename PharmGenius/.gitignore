@@ -46,3 +46,5 @@ __pycache__/
 ../icd10-service/
 ../snomed-service/
 ../drug-tool-lookup/
+
+.vercel

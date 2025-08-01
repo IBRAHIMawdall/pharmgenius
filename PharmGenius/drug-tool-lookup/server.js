@@ -3,6 +3,7 @@ import cors from 'cors';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import Papa from 'papaparse';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -17,43 +18,11 @@ app.use(express.json());
 // Serve static files from the dist directory
 app.use(express.static(path.join(__dirname, 'dist')));
 
-// Simple CSV parser function
-function parseCSV(csvText) {
-  const lines = csvText.split('\n');
-  const result = [];
-  
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i].trim();
-    if (!line) continue;
-    
-    const fields = [];
-    let current = '';
-    let inQuotes = false;
-    
-    for (let j = 0; j < line.length; j++) {
-      const char = line[j];
-      
-      if (char === '"') {
-        inQuotes = !inQuotes;
-      } else if (char === ',' && !inQuotes) {
-        fields.push(current.trim().replace(/^"|"$/g, ''));
-        current = '';
-      } else {
-        current += char;
-      }
-    }
-    
-    fields.push(current.trim().replace(/^"|"$/g, ''));
-    result.push(fields);
-  }
-  
-  return result;
-}
-
 // Load UAE drug database
-const drugDbPath = path.join(__dirname, '..', 'database', 'database', 'UAE drug list.csv');
+const drugDbPath = path.join(__dirname, '..', 'UAE drug list.csv');
 console.log('Looking for database at:', drugDbPath);
 let uaeDrugs = [];
+const uaeDrugsById = new Map(); // For fast O(1) lookups by ID
 
 try {
   let csvData = fs.readFileSync(drugDbPath, 'utf8');
@@ -61,23 +30,26 @@ try {
   if (csvData.charCodeAt(0) === 0xFEFF) {
     csvData = csvData.slice(1);
   }
-  const rows = parseCSV(csvData);
-  
-  if (rows.length > 0) {
-    const headers = rows[0];
-    
-    for (let i = 1; i < rows.length; i++) {
-      const drug = {};
-      for (let j = 0; j < headers.length; j++) {
-        drug[headers[j]] = rows[i][j] || '';
-      }
-      if (drug['Package Name']) {
-        uaeDrugs.push(drug);
-      }
-    }
+
+  const parsed = Papa.parse(csvData, {
+    header: true,
+    skipEmptyLines: true,
+  });
+
+  if (parsed.errors.length > 0) {
+    console.error('Error parsing CSV:', parsed.errors);
   }
-  
-  console.log(`Loaded ${uaeDrugs.length} drugs from UAE database`);
+
+  let idCounter = 1;
+  uaeDrugs = parsed.data.filter(drug => drug['Package Name']).map(drug => {
+    const drugWithId = { ...drug, id: idCounter++ };
+    uaeDrugsById.set(drugWithId.id.toString(), drugWithId);
+    return drugWithId;
+  });
+
+  if (uaeDrugs.length > 0) {
+    console.log(`Loaded ${uaeDrugs.length} drugs from UAE database`);
+  }
 } catch (error) {
   console.error('Error loading UAE drug database:', error);
 }
@@ -152,8 +124,8 @@ app.get('/api/drug-service/search', (req, res) => {
     return matchesQuery && matchesCategory && drug['Status'] === 'Active';
   });
   
-  results = results.slice(0, limit).map((drug, index) => ({
-    id: index + 1,
+  results = results.slice(0, limit).map(drug => ({
+    id: drug.id,
     drug_name: drug['Package Name'] || 'Unknown',
     generic_name: drug['Generic Name'] || 'Unknown',
     category: drug['Dosage Form'] || 'Medication',
@@ -177,25 +149,15 @@ app.get('/api/drug-service/search', (req, res) => {
 });
 
 app.get('/api/drug-service/drugs/:id', (req, res) => {
-  const id = parseInt(req.params.id);
-  
-  // Find drug by searching through the filtered results
-  const query = req.query.query || '';
-  let filteredDrugs = uaeDrugs.filter(drug => {
-    const matchesQuery = !query || 
-      (drug['Package Name'] && drug['Package Name'].toLowerCase().includes(query.toLowerCase())) ||
-      (drug['Generic Name'] && drug['Generic Name'].toLowerCase().includes(query.toLowerCase()));
-    return matchesQuery && drug['Status'] === 'Active';
-  });
-  
-  if (id <= 0 || id > filteredDrugs.length) {
+  const { id } = req.params;
+  const drug = uaeDrugsById.get(id);
+
+  if (!drug) {
     return res.status(404).json({ error: 'Drug not found' });
   }
-  
-  const drug = filteredDrugs[id - 1];
-  
+
   res.json({
-    id,
+    id: drug.id,
     drug_name: drug['Package Name'] || 'Unknown',
     generic_name: drug['Generic Name'] || 'Unknown',
     category: drug['Dosage Form'] || 'Medication',
